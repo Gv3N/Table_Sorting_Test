@@ -1,0 +1,114 @@
+<!--
+This project done as a test for job application for a company. The test are to create a
+table sorter using only HTML and JavaScript. Questions will be in the readme section
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+	<title>Sorting Test</title>
+</head>
+<body>
+<!-- Creating HTML elements like text boxes and button -->
+<!-- Create userID label above text box -->
+<div style="display:above-block;margin-right:20px;">
+  <label for="uid">userID</label>
+</div>
+<!-- Create 3 text boxes -->
+<input type="text" id="uid" value="1" readonly><!-- to create read only text box -->
+<input type="text" id="uname"  placeholder="UserName">
+<input type="text" id="ujob"  placeholder="UserOccupation">
+<button onclick="addData();">Add</button><!-- Add button that add data to array  -->
+<br><br><br><!-- new lines -->
+
+<!-- Create a dropdown menu -->
+<div style="display:inline-block;margin-left:270px;"><!-- to match the style given -->
+  <label for="menu">Sort by: </label>
+</div>
+<select name="ddmenu" id="menu" onchange="sortData();">
+  <option value="o_id">UserID</option>
+  <option value="o_name">UserName</option>
+  <option value="o_job">UserOccupation</option>
+</select>
+<br><br><br>
+
+<!-- create a table-->
+<table id ="myTable" style="width:200px"></table>
+<!-- table styles -->
+<style type="text/css">
+	  table, th, td, tr {
+      border-collapse: collapse; /* Table border type */
+      border: 1px solid black;
+      text-align:center; /* Align text in center */
+      margin-left: auto; /* Set table in center */
+      margin-right: auto;
+      }
+</style>
+
+<!-- JS Array -->
+<script type="text/javascript">//specifies the type of language
+//create array to store the data
+var arr = [];
+
+//create function to add data into array
+function addData(){
+    //get data from input based by ID
+  var u_id= document.getElementById('uid').value;
+  var u_name= document.getElementById('uname').value;
+  var u_job= document.getElementById('ujob').value;
+
+   //error checking for data
+  if(u_name != "" && u_job!=""){
+	//create dlist object to pass group of data to array
+	var data = {'id':u_id,'name':u_name,'job':u_job} 
+	//push object to data array
+	arr.push(data)
+  //Generate table
+  tableGenarator(arr)
+    //increment userID by 1
+    document.getElementById('uid').value = ++u_id;
+    }//end if
+    else{ alert("Please fill in all the values")
+    }//end else
+}//end addData
+	
+//table generation from data in array
+function tableGenarator(data){
+	var table = document.getElementById('myTable')
+	table.innerHTML = ''
+	for (var i = 0; i < arr.length; i++){
+		var row = `<tr>
+				<td>${arr[i].id}</td>
+				<td>${arr[i].name}</td>
+				<td>${arr[i].job}</td>
+					  </tr>`
+		table.innerHTML += row
+
+		}
+	}
+
+//sorting function
+function sortData(){
+  var selectBox = document.getElementById("menu");
+  //get selected options from dropdown menu
+  var selectOption = selectBox.options[selectBox.selectedIndex].value;
+    //using sort function
+    sortedData = arr.sort(function(a,b){
+    //Sort accending order based on selected options  
+      if(selectOption == "o_id"){  
+        return a.id > b.id;
+      }
+      else if(selectOption=="o_name"){
+        return a.name > b.name;
+      }
+      else if(selectOption=="o_job"){
+        return a.job > b.job;
+      }
+    });
+    //generate table after sortinng
+    tableGenarator(sortedData);
+}
+
+</script>
+</body>
+</html>
